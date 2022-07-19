@@ -9,6 +9,7 @@
     - ftd_sys
     - ftd
     - ftd_django
+    - black
 
 - Creates virtualenv
   - `python -m venv .env`
