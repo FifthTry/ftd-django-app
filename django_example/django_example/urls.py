@@ -28,6 +28,5 @@ urlpatterns = [
     path("api/reset-todo", views.reset_todo),
     path("api/delete-task", views.delete_todo),
     path("api/sort-todo", views.sort_todo),
-    path("api/test", views.test),
     path("", views.IndexView.as_view()),
 ] + ftd_django.static()

@@ -72,7 +72,7 @@ TEMPLATES = [
         "BACKEND": "ftd_django.TemplateBackend",
         "DIRS": ["ui"],
         "OPTIONS": {
-            "PROCESSORS": ["app.processors.todo_title", "app.processors.todo_data", "app.processors.test_data", "app.processors.get_helper_data"]
+            "PROCESSORS": ["app.processors.todo_title", "app.processors.todo_data"]
         }
     },
 ]
