@@ -1,0 +1,293 @@
+/-- import: ft/assets as ft-assets
+
+/-- import: ui/assets
+
+/-- import: ft
+
+/-- ft.page: TODO
+
+;; ------------------------------------[[ COLOR DEFINITIONS ]]-----------------------------------------
+
+-- ftd.color black:
+light: black
+dark: black
+
+-- ftd.color white:
+light: white
+dark: white
+
+-- ftd.color yellow: yellow
+dark: yellow
+
+-- ftd.color green: green
+dark: green
+
+-- ftd.color red: red
+dark: red
+
+-- ftd.color blue: blue
+dark: blue
+
+
+;; ------------------------------------[[ INVOCATIONS ]]-----------------------------------------
+
+-- ftd.column:
+width: fill
+height: 700
+background-color: $yellow
+
+-- ftd.text: Current input status
+color: $black
+padding-horizontal: 10
+
+-- ftd.text: $input_status
+color: $black
+padding-vertical: 10
+padding-horizontal: 10
+
+-- ftd.text: Current tid
+color: $black
+padding-horizontal: 10
+
+-- ftd.integer: $input_tid
+color: $black
+padding-vertical: 10
+padding-horizontal: 10
+
+-- ftd.text: $title
+color: $black
+padding-horizontal: 10
+
+-- ftd.text: $LINE_SEPERATOR
+color: $black
+padding-vertical: 5
+
+-- todo_list:
+
+-- ftd.text: $LINE_SEPERATOR
+color: $black
+
+padding-vertical: 5
+
+-- add_bar:
+
+-- reset_bar:
+
+-- sort_bar:
+
+-- note_bar: NOTE:
+items: $notes
+
+;; ------------------------------------[[ INITIALIZATIONS ]]-----------------------------------------
+
+-- string LINE_SEPERATOR: =================================================================================================
+
+-- string input_status: None
+
+-- integer input_tid: -1
+
+-- string title:
+$processor$: todo_title
+
+"Default Message"
+
+-- string list test_data:
+$processor$: test_data
+
+;; TODO list [items] initialized <- todo_data processor
+-- todo_item list items:
+$processor$: todo_data
+
+-- string list notes:
+-- notes: [Sort Todo] will sort the todo list items based on status priority (In progress/Working > Pending > Done/Completed)
+-- notes: [Reset Todo] will reset the todo list to its initial state
+-- notes: [Add Task] will let you add new todo tasks to the existing todo list
+-- notes: [Update Status] and [Delete Task] will do their corresponding actions accordingly
+
+;; ------------------------------------[[ DEFINITIONS ]]-----------------------------------------
+
+-- record todo_item:
+string task_name:
+string status:
+integer tid:
+
+-- ftd.column todo_list:
+
+--- top_bar:
+
+--- print-item:
+$loop$: $items as $item
+status: $item.status
+task_name: $item.task_name
+tid: $item.tid
+
+-- ftd.row top_bar:
+spacing: 24
+padding-vertical: 10
+
+--- ftd.text: Todo Name
+text-align: center
+color: $black
+width: 300
+
+--- ftd.text: Status
+text-align: center
+color: $black
+width: 100
+
+-- ftd.row reset_bar:
+spacing: 24
+padding-vertical: 10
+string tn_add: Nothing..
+
+--- ftd.text: Option 2 ->
+text-align: center
+color: $black
+width: 300
+
+;; [**RESET TO-DO BUTTON**]
+--- ftd.text: Reset todo
+color: $black
+border-color: $red
+border-width: 2
+text-align: center
+width: 100
+$on-click$: message-host $reset_todo_api
+$on-mouse-enter$: $input_tid=-3
+$on-mouse-leave$: $input_tid=-1
+
+-- ftd.row add_bar:
+spacing: 24
+padding-vertical: 10
+
+--- ftd.text: Option 1 ->
+text-align: center
+color: $black
+width: 300
+
+--- ftd.input:
+$on-input$: $input_status=$VALUE
+placeholder: Enter Task here..
+
+;; [**ADD TASK BUTTON**]
+--- ftd.text: Add task
+color: $black
+border-color: $red
+border-width: 2
+width: 100
+text-align: center
+$on-click$: message-host $add-task-api
+$on-mouse-enter$: $input_tid=-2
+$on-mouse-leave$: $input_tid=-1
+
+-- ftd.row sort_bar:
+spacing: 24
+padding-vertical: 10
+
+--- ftd.text: Option 3 ->
+text-align: center
+color: $black
+width: 300
+
+;; [**SORT TO-DO BUTTON**]
+--- ftd.text: Sort Todo
+color: $black
+border-color: $blue
+border-width: 2
+text-align: center
+width: 100
+$on-click$: message-host $sort_todo_api
+$on-mouse-enter$: $input_tid=-4
+$on-mouse-leave$: $input_tid=-1
+
+-- ftd.row print-item:
+spacing: 24
+padding-vertical: 10
+string status:
+string task_name:
+integer tid:
+
+--- ftd.text: $task_name
+text-align: center
+color: $black
+width: 300
+
+--- ftd.text: $status
+text-align: center
+color: $black
+width: 100
+
+--- ftd.input:
+$on-input$: $input_status=$VALUE
+placeholder: Enter Status
+
+;; [**UPDATE BUTTON**]
+--- ftd.text: Update Status
+color: $black
+border-color: $green
+border-width: 2
+width: 100
+text-align: center
+$on-mouse-enter$: $input_tid=$tid
+$on-click$: message-host $update-status-api
+$on-mouse-leave$: $input_tid=-1
+
+;; [**DELETE BUTTON**]
+--- ftd.text: Delete Task
+color: $black
+border-color: $red
+border-width: 2
+width: 100
+text-align: center
+$on-mouse-enter$: $input_tid=$tid
+$on-click$: message-host $delete_task_api
+$on-mouse-leave$: $input_tid=-1
+
+-- ftd.column note_bar:
+caption title:
+spacing: 10
+string list items: $note-items
+
+--- ftd.text: $title
+padding-horizontal: 10
+
+--- ftd.text: $i
+$loop$: $items as $i
+padding-horizontal: 10
+
+;; ------------------------------------[[ API OBJECTS ]]-----------------------------------------
+
+-- object update-status-api:
+function: http
+method: post
+url: /api/update-status
+status: $input_status
+tid: $input_tid
+
+-- object add-task-api:
+function: http
+method: post
+url: /api/add-task
+task_name: $input_status
+
+-- object reset_todo_api:
+function: http
+method: post
+url: /api/reset-todo
+
+-- object test-api:
+function: http
+method: post
+url: /api/test
+task_name: $input_status
+
+-- object delete_task_api:
+function: http
+method: post
+url: /api/delete-task
+tid: $input_tid
+
+-- object sort_todo_api:
+function: http
+method: post
+url: /api/sort-todo
