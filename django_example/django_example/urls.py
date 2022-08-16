@@ -1,4 +1,4 @@
-"""app URL Configuration
+"""django_example URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.0/topics/http/urls/
@@ -16,7 +16,7 @@ Including another URLconf
 # from django.contrib import admin
 from django.urls import path, include
 from django.contrib import admin
-from todo import views
+from app import views
 import ftd_django
 
 urlpatterns = [
@@ -24,9 +24,5 @@ urlpatterns = [
     path("api/get-data", views.get_data),
     path("api/post-data", views.post_data),
     path("api/update-status", views.update_todo),
-    path("api/add-task", views.add_task),
-    path("api/reset-todo", views.reset_todo),
-    path("api/delete-task", views.delete_todo),
-    path("api/sort-todo", views.sort_todo),
     path("", views.IndexView.as_view()),
 ] + ftd_django.static()
