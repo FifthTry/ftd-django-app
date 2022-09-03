@@ -1,6 +1,6 @@
 -- import: fpm
 
 -- fpm.package: ui
-base: www.ui.com
+download-base-url: www.ui.com
 
 -- fpm.dependency: fifthtry.github.io/doc-site as ft
